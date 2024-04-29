@@ -1,0 +1,60 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+}
+
+.pfmb-form {
+    padding: 0px;
+    margin: 0px;
+    /* display: flex;
+    flex-direction: column;
+    gap: 10px; */
+}
+
+.pfmb-form .field-row {
+    margin: 0 0 18px 0;
+    padding: 5px;
+    overflow: auto;
+}
+
+.pfmb-form .field-row label:first-child {
+    display: block;
+    margin: 0 0 5px 0;
+}
+
+.pfmb-form .field-row input:not([type="radio"], [type="checkbox"], [type="color"], [type="submit"], [type="reset"], [type="button"], [type="file"]), .pfmb-form .field-row textarea {
+    display: block;
+    margin: 0 0 5px 0;
+    padding: 5px;
+    font-size: 15px;
+    width: 100%;
+}
+
+.pfmb-form .col-10 {
+    width: 10% !important;
+    float: left;
+}
+
+.pfmb-form .col-20 {
+    width: 20% !important;
+    float: left;
+}
+
+.pfmb-form .col-25 {
+    width: 25% !important;
+    float: left;
+}
+
+.pfmb-form .col-33 {
+    width: 33% !important;
+    float: left;
+}
+
+.pfmb-form .col-50 {
+    width: 50% !important;
+    float: left;
+}
+
+.pfmb-form .col-75 {
+    width: 75% !important;
+    float: left;
+}
