@@ -1,4 +1,4 @@
-<?php
+    <?php
     use App\FormBuilder\FormConfig;
     FormConfig::loadAssets([$form1]);
     ?>
