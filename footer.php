@@ -1,6 +1,6 @@
 <?php
-    use App\FormBuilder\FormConfig;
-    FormConfig::loadAssets([$form1]);
-    ?>
+use App\FormBuilder\FormConfig;
+FormConfig::loadAssets([$form1]);
+?>
 </body>
 </html>
