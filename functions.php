@@ -32,7 +32,6 @@ $form1 = Form::make('another-form', 'Contact me')
             ]),
         Field::make('email', 'email', 'Your email')
             ->setConditionalLogic([
-                'relation' => 'AND',
                 [
                     'field' => 'my-radio',
                     'compare' => '=',
@@ -89,4 +88,34 @@ $form1 = Form::make('another-form', 'Contact me')
             ->setValue('Submit form')
     ]);
 
-return $form1;
+$form2 = Form::make('contact-me-form', 'Choose contact')
+        ->setDescription('Compile this form and you\'ll be recontacted!')
+        ->setMethod('POST')
+        ->setAction('/')
+        ->setWidth(50, '%')
+        ->setEncodingType('multipart/form-data')
+        ->addFields([
+            Field::make('radio', 'chose-modal', 'Test checkbox')
+                ->setOptions([
+                    'view-email' => 'Via email',
+                    'view-phone' => 'Via phone'
+                ]),
+            Field::make('email', 'user-email', 'Email address')
+                ->setConditionalLogic([
+                    [
+                        'field' => 'chose-modal',
+                        'value' => 'view-email',
+                        'compare' => '='
+                    ]
+                ]),
+            Field::make('tel', 'user-phone', 'Phone number')
+                ->setConditionalLogic([
+                    [
+                        'field' => 'chose-modal',
+                        'value' => 'view-phone',
+                        'compare' => '='
+                    ]
+                ])
+        ]);
+
+return [$form1, $form2];
