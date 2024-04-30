@@ -3,6 +3,7 @@
 use App\FormBuilder\Form;
 use App\FormBuilder\Field;
 
+// Form 1.
 $form1 = Form::make('another-form', 'Contact me')
     ->setDescription('Compile this form and you\'ll be recontacted!')
     ->setMethod('POST')
@@ -88,6 +89,7 @@ $form1 = Form::make('another-form', 'Contact me')
             ->setValue('Submit form')
     ]);
 
+// Form 2.
 $form2 = Form::make('contact-me-form', 'Choose contact')
         ->setDescription('Compile this form and you\'ll be recontacted!')
         ->setMethod('POST')
@@ -118,4 +120,56 @@ $form2 = Form::make('contact-me-form', 'Choose contact')
                 ])
         ]);
 
-return [$form1, $form2];
+// Form 3.
+$form3 = Form::make('contact-me-form-stepp', 'Choose contact')
+    ->setDescription('Compile this form and you\'ll be recontacted!')
+    ->setMethod('POST')
+    ->setAction('/')
+    ->setWidth(50, '%')
+    ->setEncodingType('multipart/form-data')
+    ->addStep([
+        Field::make('text', 'fname', 'Il tuo nome'),
+        Field::make('text', 'lname', 'Il tuo cognome')
+    ])
+    ->addStep([
+        Field::make('email', 'email-address', 'Il tuo indirizzo email'),
+        Field::make('tel', 'phone-number', 'Il tuo numero di telefono'),
+        Field::make('number', 'choose-number', 'Un numero a caso')
+    ])
+    ->addStep([
+        Field::make('color', 'user-color', 'Scegli un colore!')
+    ]);
+
+// Form 3.
+$form4 = Form::make('second-step-form', 'Choose contact')
+    ->setDescription('Compile this form and you\'ll be recontacted!')
+    ->setMethod('POST')
+    ->setAction('/')
+    ->setWidth(50, '%')
+    ->setEncodingType('multipart/form-data')
+    ->addStep([
+        Field::make('text', 'fname', 'Il tuo nome'),
+        Field::make('text', 'lname', 'Il tuo cognome')
+    ])
+    ->addStep([
+        Field::make('email', 'email-address', 'Il tuo indirizzo email'),
+        Field::make('tel', 'phone-number', 'Il tuo numero di telefono'),
+        Field::make('number', 'choose-number', 'Un numero a caso')
+    ])
+    ->addStep([
+        Field::make('color', 'user-color', 'Scegli un colore!')
+    ])
+    ->addStep([
+        Field::make('text', 'fname', 'Il tuo nome'),
+        Field::make('text', 'lname', 'Il tuo cognome')
+    ])
+    ->addStep([
+        Field::make('email', 'email-address', 'Il tuo indirizzo email'),
+        Field::make('tel', 'phone-number', 'Il tuo numero di telefono'),
+        Field::make('number', 'choose-number', 'Un numero a caso')
+    ])
+    ->addStep([
+        Field::make('color', 'user-color', 'Scegli un colore!')
+    ]);
+
+return [$form1, $form2, $form3, $form4];

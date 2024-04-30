@@ -2,12 +2,39 @@
 
 namespace App\FormBuilder;
 
+use App\FormBuilder\FieldClasses;
 use App\Utils\Str;
 
 /**
  * Abstract class to build the field's form.
  */
 abstract class FieldBuilder {
+
+    /**
+     * Build field row.
+     */
+    protected static function buildFieldRow(Field $field): string {
+        if (!($field instanceof Field)) {
+            throw new \Exception('This is not a valid field!');
+        }
+
+        $html = (string) '';
+
+        // echo "<pre>";
+        // print_r($field->getConditionalLogic());
+        // echo "</pre>";
+
+        // Build single field.
+        $html .= '<div class="field-row field';
+        $html .= FieldClasses::fieldWidthExists($field->getWidth()) ? ' ' . FieldClasses::getWidthClass($field->getWidth()) : '';
+        $html .= $field->getConditionalLogic() ? ' hidden' : '';
+        $html .= '">';
+            $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
+            $html .= static::dispatchField($field);
+        $html .= '</div>';
+
+        return $html;
+    }
 
     /**
      * Build the selected field.

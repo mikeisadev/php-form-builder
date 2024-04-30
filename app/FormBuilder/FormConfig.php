@@ -20,6 +20,7 @@ class FormConfig {
         if ($forms) {
             // Init form conditionals for JS.
             $formConditionals = [];
+            $formConfig = [];
 
             foreach ($forms as $form) {
                 // Get form id.
@@ -50,16 +51,26 @@ class FormConfig {
                     $formConditionals = [...$logic, ...$formConditionals];
                 }
                 // END Build form conditionals for JS.
-            }
 
+                // START Build form config for steps for JS.
+                if ( $steps = $form->getFormSteps() ) {
+                    $formConfig[] = [
+                        'formId'        => '#'.$formId,
+                        'initialStep'   => 1,
+                        'totalSteps'    => count($steps)
+                    ];
+                }
+                // END Build form config for steps for JS.
+            }
             // Concat form conditionals.
             $js .= 'const formConditionals = '. json_encode($formConditionals) .';';
+            $js .= 'const formConfig = '. json_encode($formConfig) .';';
         }
         ?>
-        <script id="pfmb-steps"><?= file_get_contents(__DIR__ . '/assets/js/steps.js'); ?></script>
-        <script id="pfmb-conditionals">
+        <script id="pfmb-js">
             <?php 
             echo $js;
+            echo file_get_contents(__DIR__ . '/assets/js/steps.js');
             echo file_get_contents(__DIR__ . '/assets/js/conditionals.js');
             ?>
         </script>

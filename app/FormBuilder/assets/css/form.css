@@ -16,7 +16,7 @@
     overflow: auto;
 }
 
-.pfmb-form .hidden {
+.pfmb-form .hidden, .pfmb-form .form-step.hidden-step {
     display: none !important;
 }
 

@@ -40,7 +40,12 @@ class Form {
     /**
      * Form steps.
      */
-    public ?array $formSteps = null;
+    private ?array $formSteps = null;
+
+    /**
+     * Count form step.
+     */
+    private int $formStep = 0;
 
     /**
      * Form fields.
@@ -158,7 +163,9 @@ class Form {
      * Add steps to the form.
      */
     public function addStep(array $fields): self {
-        $this->setFormFields($fields);
+        $this->setFormFields($fields, 'steps', $this->formStep);
+
+        $this->formStep++;
         
         return $this;
     }
@@ -167,7 +174,7 @@ class Form {
      * Add fields to the form.
      */
     public function addFields(array $fields): self {
-        $this->setFormFields($fields);
+        $this->setFormFields($fields, 'fields');
 
         return $this;
     }
@@ -175,14 +182,29 @@ class Form {
     /**
      * Set form fields.
      */
-    private function setFormFields(array $fields) {
+    private function setFormFields(array $fields, string $where, ?int $step = null) {
+        if ( !in_array($where, ['fields', 'steps']) ) {
+            throw new \Exception('The $where parameter can only be "fields" or "steps"');
+        }
+
         foreach ($fields as $index => $field) {
             if (!($field instanceof Field)) {
                 throw new \Exception('The field must be an instance of "Field" object');
             }
 
             // Set form fields.
-            $this->formFields[] = $field;
+            if ('fields' === $where) {
+                $this->formFields[] = $field;
+            }
+
+            // Set form steps.
+            if ('steps' === $where) {
+                if (is_null($step)) {
+                    throw new \Exception('The $step variable cannot be null!');
+                }
+
+                $this->formSteps[$this->formStep][] = $field;
+            }
 
             // Set form conditionals if available.
             if ($field->getConditionalLogic()) {
@@ -245,6 +267,13 @@ class Form {
      */
     public function getFields(): array {
         return $this->formFields;
+    }
+
+    /**
+     * Get form steps.
+     */
+    public function getFormSteps(): ?array {
+        return $this->formSteps;
     }
 
     /**

@@ -4,7 +4,6 @@ namespace App\FormBuilder;
 
 use App\FormBuilder\Form;
 use App\FormBuilder\Field;
-use App\FormBuilder\FieldClasses;
 use App\Utils\Str;
 
 /**
@@ -20,11 +19,16 @@ class FormBuilder extends FieldBuilder {
         $html = (string) '';
         $fields = (array) [];
 
-        // Set.
+        // Get fields.
         $fields = $form->getFields();
 
+        // Get form steps.
+        $formSteps = $form->getFormSteps();
+
+        // Build form wrap.
         $html = '<div class="pfmb-form-wrap">';
 
+        // Add form title and description.
         if ($form->getTitle()) {
             $html .= '<div class="form-header">';
             $html .= "<h2 class='form-title'>{$form->getTitle()}</h2>";
@@ -40,30 +44,36 @@ class FormBuilder extends FieldBuilder {
         $html .= $form->getEncodingType() ? "enctype='{$form->getEncodingType()}'" : '';
         $html .= '>';
 
-        // Build the fields.
-        foreach ($fields as $field) {
-            if (!($field instanceof Field)) {
-                throw new \Exception('This is not a valid field!');
+        // Build the fields if we have them.
+        if ($fields) {
+            foreach ($fields as $field) {
+                $html .= parent::buildFieldRow($field);
             }
+        }
 
-            // echo "<pre>";
-            // print_r($field->getConditionalLogic());
-            // echo "</pre>";
-
-            // Build single field.
-            $html .= '<div class="field-row field';
-            $html .= FieldClasses::fieldWidthExists($field->getWidth()) ? ' ' . FieldClasses::getWidthClass($field->getWidth()) : '';
-            $html .= $field->getConditionalLogic() ? ' hidden' : '';
-            $html .= '">';
-                $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
-                $html .= parent::dispatchField($field);
-            $html .= '</div>';
-
+        // Build the steps if we have them.
+        if ($formSteps) {
+            foreach ($formSteps as $index => $step) {
+                $html .= '<div class="form-step single-step' . ($index !== 0 ? ' hidden-step' : '') . '">';
+                foreach ($step as $field) {
+                    $html .= parent::buildFieldRow($field);
+                }
+                $html .= '</div>';
+            }
         }
 
         // Close the form.
         $html .= '</form>';
 
+        // Build the action bar.
+        if ($formSteps) {
+            $html .= '<div class="action-bar-wrap">';
+            $html .= '<div class="form-index">Step <span class="start">1</span> di <span class="end">' . count($formSteps) . '</span></div>';
+            $html .= '<div class="actions"><button class="form-back" data-action="back">Indietro</button><button class="form-next" data-action="next">Avanti</button></div>';
+            $html .= '</div>';
+        }
+
+        // Close the wrap.
         $html .= '</div>';
 
         // Show the form.
