@@ -13,9 +13,10 @@ if (formConditionals.length > 0) {
         delete conditions.targetFieldSel;
         delete conditions.relation;
         delete conditions.formId;
+        delete conditions.position;
 
         // Select the form
-        const formContainer = document.querySelector(`#${formId}`);
+        const formContainer = document.querySelector(formId);
 
         // Target field.
         const targetField = document.querySelector(targetFieldSel);

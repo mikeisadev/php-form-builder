@@ -60,6 +60,11 @@ class Form {
     private array $formStyle = [];
 
     /**
+     * Form conditionals.
+     */
+    private array $formConditionals = [];
+
+    /**
      * Allowed methods.
      */
     private array $allowedMethods = ['POST', 'GET'];
@@ -148,12 +153,12 @@ class Form {
 
         return $this;
     }
-
-    
+ 
     /**
      * Add steps to the form.
      */
-    public function addStep(): self {
+    public function addStep(array $fields): self {
+        $this->setFormFields($fields);
         
         return $this;
     }
@@ -162,15 +167,35 @@ class Form {
      * Add fields to the form.
      */
     public function addFields(array $fields): self {
-        foreach ($fields as $field) {
+        $this->setFormFields($fields);
+
+        return $this;
+    }
+
+    /**
+     * Set form fields.
+     */
+    private function setFormFields(array $fields) {
+        foreach ($fields as $index => $field) {
             if (!($field instanceof Field)) {
                 throw new \Exception('The field must be an instance of "Field" object');
             }
 
+            // Set form fields.
             $this->formFields[] = $field;
-        }
 
-        return $this;
+            // Set form conditionals if available.
+            if ($field->getConditionalLogic()) {
+                $index = $index + 1;
+
+                $this->formConditionals[] = [
+                    'formId'            => '#'.$this->getId(),
+                    'targetFieldSel'    => '#'.$this->getId().' .field-row:nth-child(-'.$index.'n+'.$index.')',
+                    'position'          => $index,
+                    ...$field->getConditionalLogic()
+                ];
+            }
+        }
     }
 
     /**
@@ -237,6 +262,13 @@ class Form {
     }
 
     /**
+     * Get form conditionals.
+     */
+    public function getFormConditionals(): array {
+        return $this->formConditionals;
+    }
+
+    /**
      * Statically call methods.
      */
     public static function __callStatic($method, $arguments): self|\Exception {
@@ -258,12 +290,5 @@ class Form {
     public function build() {
         FormBuilder::build($this);
     }
-
-    /**
-     * On form destruct build the form.
-     */
-    // public function __destruct() {
-    //     FormBuilder::build($this);
-    // }
 
 }
