@@ -47,12 +47,13 @@ class FormBuilder extends FieldBuilder {
             }
 
             // echo "<pre>";
-            // print_r($field);
+            // print_r($field->getConditionalLogic());
             // echo "</pre>";
 
             // Build single field.
             $html .= '<div class="field-row field';
             $html .= FieldClasses::fieldWidthExists($field->getWidth()) ? ' ' . FieldClasses::getWidthClass($field->getWidth()) : '';
+            $html .= $field->getConditionalLogic() ? ' hidden' : '';
             $html .= '">';
                 $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
                 $html .= parent::dispatchField($field);

@@ -10,7 +10,7 @@ $form1 = Form::make('another-form', 'Contact me')
     ->setWidth(50, '%')
     ->setEncodingType('multipart/form-data')
     ->addFields([
-        Field::make('checkbox', 'name', 'Seleziona personaggi', true)
+        Field::make('checkbox', 'select-name', 'Seleziona personaggi', true)
             ->setWidth(33, '%')
             ->setOptions([
                 'michele' => 'Michele',
@@ -19,7 +19,7 @@ $form1 = Form::make('another-form', 'Contact me')
         Field::make('text', 'name', 'label')
             ->setWidth(33, '%')
             ->setPlaceholder('dj'),
-        Field::make('textarea', 'd', 'Il tuo messaggio')
+        Field::make('textarea', 'message', 'Il tuo messaggio')
             ->setWidth(33, '%')
             ->setPlaceholder('fuck')
             ->setCols(50)
@@ -27,30 +27,62 @@ $form1 = Form::make('another-form', 'Contact me')
         Field::make('radio', 'my-radio', 'Seleziona un\'opzione')
             ->setWidth(33, '%')
             ->setOptions([
-                'hello' => 'Opzione 1',
-                'hello2' => 'Opzione2'
+                'option1' => 'Opzione 1',
+                'option2' => 'Opzione2'
             ]),
-        Field::make('email', 'email', 'Your email'),
+        Field::make('email', 'email', 'Your email')
+            ->setConditionalLogic([
+                'relation' => 'AND',
+                [
+                    'field' => 'my-radio',
+                    'compare' => '=',
+                    'value' => 'option1'
+                ]
+            ]),
         Field::make('color', 'yourFavouriteColor', 'Your color')
-            ->setValue('#000ccc'),
+            ->setValue('#000ccc')
+            ->setConditionalLogic([
+                'relation' => 'OR',
+                [
+                    'field' => 'select-name',
+                    'compare' => '=',
+                    'value' => 'michele'
+                ],
+                [
+                    'field' => 'select-name',
+                    'compare' => '=',
+                    'value' => 'francesco'
+                ],
+                [
+                    'field' => 'random',
+                    'compare' => '<=',
+                    'value' => '10'
+                ]
+            ]),
         Field::make('date', 'start-date', 'Select a start date')
             ->setValue('2027-04-27'),
         Field::make('datetime', 'start-datetime', 'Select a start date and time')
             ->setValue('2027-04-27T14:30:00'),
-        Field::make('week', 'start-datetime', 'Select a start date and time'),
-        Field::make('time', 'start-datetime', 'Select a start date and time'),
+        Field::make('week', 'start-datetime', 'Select a start date and time')
+            ->setWidth(50, '%'),
+        Field::make('time', 'start-datetime', 'Select a start date and time')
+            ->setWidth(50, '%'),
         Field::make('month', 'start-datetime', 'Select a start date and time'),
         Field::make('reset', 'reset'),
         Field::make('search', 'reset')
+            ->setWidth(50, '%')
             ->setPlaceholder('Search something...'),
         Field::make('number', 'random')
+            ->setWidth(50, '%')
             ->setPlaceholder('Select a number'),
         Field::make('file', 'attachments')
+            ->setWidth(50, '%')
             ->setAcceptedExts([
                 'application/pdf'
             ]),
         Field::make('url', 'your-website', 'Insert your website url'),
-        Field::make('range', 'range', 'Select a range'),
+        Field::make('range', 'range', 'Select a range')
+            ->setWidth(50, '%'),
         Field::make('hidden', 'csrf-token', 'Hhdh')
             ->setValue(bin2hex(random_bytes(5))),
         Field::make('submit', 'rg')

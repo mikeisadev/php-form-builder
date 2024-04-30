@@ -46,6 +46,11 @@ class Field {
     private string $width = '100%';
 
     /**
+     * Field conditional logic.
+     */
+    private ?array $conditionalLogic = NULL;
+
+    /**
      * Make a field.
      */
     public static function make(string $type, string $name, ?string $label = NULL, bool $required = false) {
@@ -113,6 +118,25 @@ class Field {
     }  
 
     /**
+     * Set conditional logic.
+     */
+    public function setConditionalLogic(array $logic): self {
+        $relations = ['AND', 'OR'];
+
+        if (!array_key_exists('relation', $logic)) {
+            $logic['relation'] = 'AND';
+        } else {
+            if ( !in_array($logic['relation'], $relations) ) {
+                throw new \Exception('Invalid relation inside conditional logic!');
+            }
+        }
+
+        $this->conditionalLogic = $logic;
+
+        return $this;
+    }
+
+    /**
      * Get field id.
      */
     public function getId(): string {
@@ -145,6 +169,13 @@ class Field {
      */
     public function getWidth(): string {
         return $this->width;
+    }
+
+    /**
+     * Get field conditional logic.
+     */
+    public function getConditionalLogic(): ?array {
+        return $this->conditionalLogic;
     }
 
     /**

@@ -74,9 +74,10 @@ abstract class FieldBuilder {
      */
     protected static function buildTextareaField(Field $options) {
         $field = '<textarea id="' . $options->getId() . '" ';
-        $field .= $options->hasPlaceholder() ? 'placeholder=' . $options->getPlaceholder() . ' ' : '';
-        $field .= $options->getRows() ? 'rows=' . $options->getRows() . ' ' : '';
-        $field .= $options->getCols() ? 'cols=' . $options->getCols() . ' ' : '';
+        $field .= $options->getName() ? 'name="' . $options->getName() . '" ' : '';
+        $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '" ' : '';
+        $field .= $options->getRows() ? 'rows="' . $options->getRows() . '" ' : '';
+        $field .= $options->getCols() ? 'cols="' . $options->getCols() . '" ' : '';
         $field .= '>'; 
         $field .= '</textarea>';
 

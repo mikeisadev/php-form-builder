@@ -16,6 +16,10 @@
     overflow: auto;
 }
 
+.pfmb-form .hidden {
+    display: none !important;
+}
+
 .pfmb-form .field-row label:first-child {
     display: block;
     margin: 0 0 5px 0;
