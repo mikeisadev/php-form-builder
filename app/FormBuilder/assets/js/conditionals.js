@@ -29,14 +29,18 @@ if (formConditionals.length > 0) {
             const controllerField = (() => {
                 if (document.querySelector(`input[name=${field}]`)) {
                     return document.querySelectorAll(`input[name=${field}]`);
-                } else {
+                } else if (document.querySelector(`textarea[name=${field}]`)) {
                     return document.querySelectorAll(`textarea[name=${field}]`);
+                } else {
+                    return document.querySelectorAll(`select[name=${field}]`);
                 }
             })()
 
             controllerField.forEach(field => {
                 const fieldType = field.getAttribute('type');
                 const tagName = field.tagName
+
+                console.log(field)
 
                 field.addEventListener('input', e => {
                     switch(true) {
@@ -48,9 +52,11 @@ if (formConditionals.length > 0) {
                         case 'radio' === fieldType:
                             switches[key] = (e.target.checked && value === e.target.value)
                             break;
+                        case 'SELECT' === tagName:
                         case 'TEXTAREA' === tagName:
                         case 'text' === fieldType:
                         case 'number' === fieldType:
+                        case 'color' === fieldType:
                             switch(compare) {
                                 case '=':
                                     switches[key] = (e.target.value == value);
@@ -102,6 +108,8 @@ if (formConditionals.length > 0) {
             }
 
             // console.log(status, switches, targetField, relation)
+
+            console.log(targetField, status, switches)
 
             // Reveal the field based on "status"
             if (status) {

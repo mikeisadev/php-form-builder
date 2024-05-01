@@ -26,12 +26,24 @@ class FormConfig {
                 // Get form id.
                 $formId = $form->getId();
 
-                // START Build form style.
-                $css .= "#{$formId} {";
-                foreach ($form->getFormStyle() as $property => $value) {
-                    $css .= "{$property}:{$value}";
+                // START Build form wrap style.
+                if ($form->getFormWrapStyle()) {
+                    $css .= "#{$formId}__wrap {";
+                    foreach ($form->getFormWrapStyle() as $property => $value) {
+                        $css .= "{$property}:{$value}";
+                    }
+                    $css .= '}';
                 }
-                $css .= '}';
+                // END Build form wrap style.
+
+                // START Build form style.
+                if ($form->getFormStyle()) {
+                    $css .= "#{$formId} {";
+                    foreach ($form->getFormStyle() as $property => $value) {
+                        $css .= "{$property}:{$value}";
+                    }
+                    $css .= '}';
+                }
                 // END Build form style.
 
                 // START Build style PER field.

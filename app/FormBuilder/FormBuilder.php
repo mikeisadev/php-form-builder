@@ -25,8 +25,11 @@ class FormBuilder extends FieldBuilder {
         // Get form steps.
         $formSteps = $form->getFormSteps();
 
+        // Form step config.
+        $formStepConfig = null;
+
         // Build form wrap.
-        $html = '<div class="pfmb-form-wrap">';
+        $html = '<div class="pfmb-form-wrap" id="'.$form->getId().'__wrap">';
 
         // Add form title and description.
         if ($form->getTitle()) {
@@ -34,6 +37,19 @@ class FormBuilder extends FieldBuilder {
             $html .= "<h2 class='form-title'>{$form->getTitle()}</h2>";
             $html .= $form->getDescription() ? "<p class='form-description'>{$form->getDescription()}</p>" : '';
             $html .= '</div>';
+        }
+
+        // Wrap the form in "form-body" div.
+        $html .= '<div class="form-body">';
+
+        if ($formSteps) {
+            $formStepConfig = $form->getFormStepConfig();
+
+            if ($formStepConfig['progressBar']) {
+                $html .= '<div class="progress-bar-wrap">';
+                $html .= '<div class="progress-bar" style="width: 0%;"></div>';
+                $html .= '</div>';
+            }
         }
 
         // Start building the form.
@@ -68,10 +84,17 @@ class FormBuilder extends FieldBuilder {
         // Build the action bar.
         if ($formSteps) {
             $html .= '<div class="action-bar-wrap">';
-            $html .= '<div class="form-index">Step <span class="start">1</span> di <span class="end">' . count($formSteps) . '</span></div>';
+
+            if ( $formStepConfig['stepIndex'] ) {
+                $html .= '<div class="form-index">Step <span class="start">1</span> di <span class="end">' . count($formSteps) . '</span></div>';
+            }
+
             $html .= '<div class="actions"><button class="form-back" data-action="back">Indietro</button><button class="form-next" data-action="next">Avanti</button></div>';
             $html .= '</div>';
         }
+
+        // Close the form body container.
+        $html .= '</div>';
 
         // Close the wrap.
         $html .= '</div>';

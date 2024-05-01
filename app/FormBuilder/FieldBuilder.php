@@ -29,7 +29,10 @@ abstract class FieldBuilder {
         $html .= FieldClasses::fieldWidthExists($field->getWidth()) ? ' ' . FieldClasses::getWidthClass($field->getWidth()) : '';
         $html .= $field->getConditionalLogic() ? ' hidden' : '';
         $html .= '">';
-            $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
+            if ( 'paragraph' !== $field->getType() ) {
+                $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
+            }
+
             $html .= static::dispatchField($field);
         $html .= '</div>';
 
@@ -44,11 +47,17 @@ abstract class FieldBuilder {
         $field = (string) '';
 
         switch(true) {
+            case 'paragraph' === $type:
+                $field = static::buildParagraphField($options);
+                break;
             case 'textarea' === $type:
                 $field = static::buildTextareaField($options);
                 break;
             case 'checkbox' === $type || 'radio' === $type:
                 $field = static::buildOptionsField($options);
+                break;
+            case 'select' === $type:
+                $field = static::buildSelectField($options);
                 break;
             default:
                 $field = static::buildField($options);
@@ -79,7 +88,7 @@ abstract class FieldBuilder {
     /**
      * Build an option field (checkbox or radio)
      */
-    protected static function buildOptionsField(Field $options) {
+    protected static function buildOptionsField(Field $options): string {
         $field = '<div class="' . $options->getType() . '-field">';
 
         foreach ($options->getOptions() as $value => $label) {
@@ -99,7 +108,7 @@ abstract class FieldBuilder {
     /**
      * Build a text area.
      */
-    protected static function buildTextareaField(Field $options) {
+    protected static function buildTextareaField(Field $options): string {
         $field = '<textarea id="' . $options->getId() . '" ';
         $field .= $options->getName() ? 'name="' . $options->getName() . '" ' : '';
         $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '" ' : '';
@@ -107,6 +116,30 @@ abstract class FieldBuilder {
         $field .= $options->getCols() ? 'cols="' . $options->getCols() . '" ' : '';
         $field .= '>'; 
         $field .= '</textarea>';
+
+        return $field;
+    }
+
+    /**
+     * Build a paragraph.
+     */
+    protected static function buildParagraphField(Field $options): string {
+        $field = '<p id="'. $options->getId() .'" p-name="' . $options->getName() . '">';
+        $field .= $options->hasLabel() ? $options->getLabel() : '';
+        $field .= '</p>';
+
+        return $field;
+    }
+
+    /**
+     * Build a select field.
+     */
+    private static function buildSelectField(Field $options): string {
+        $field = '<select id="' . $options->getId() . '" name="' . $options->getName() . '">';
+        foreach ($options->getOptions() as $value => $label) {
+            $field .= '<option value="'. $value .'">'. $label .'</option>';
+        }
+        $field .= '</select>';
 
         return $field;
     }

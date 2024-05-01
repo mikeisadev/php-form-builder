@@ -48,16 +48,22 @@ class Form {
     private int $formStep = 0;
 
     /**
+     * Form with steps config.
+     */
+    private array $formStepConfig = [
+        'progressBar' => false,
+        'stepIndex'   => true,
+    ];
+
+    /**
      * Form fields.
      */
     private array $formFields = [];
 
     /**
-     * Fields config.
-     * 
-     * This is used with FormProcessor during validation.
+     * Form wrap style.
      */
-    private array $formFieldsConfig = [];
+    private array $formWrapStyle = [];
 
     /**
      * Form style.
@@ -153,8 +159,17 @@ class Form {
     /**
      * Set form width.
      */
-    public function setWidth(int $width, string $unit): self {
+    public function setWidth(int $width, string $unit = '%'): self {
         $this->formStyle['width'] = "{$width}{$unit}";
+
+        return $this;
+    }
+
+    /**
+     * Set form wrap width.
+     */
+    public function setWrapWidth(int $width, string $unit = '%'): self {
+        $this->formWrapStyle['width'] = "{$width}{$unit}";
 
         return $this;
     }
@@ -175,6 +190,24 @@ class Form {
      */
     public function addFields(array $fields): self {
         $this->setFormFields($fields, 'fields');
+
+        return $this;
+    }
+
+    /**
+     * Show progress bar in the form with steps?
+     */
+    public function showProgressBar(bool $visibility): self {
+        $this->formStepConfig['progressBar'] = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * Show index in the form with steps?
+     */
+    public function showIndex(bool $visibility): self {
+        $this->formStepConfig['stepIndex'] = $visibility;
 
         return $this;
     }
@@ -210,9 +243,18 @@ class Form {
             if ($field->getConditionalLogic()) {
                 $index = $index + 1;
 
+                $targetFieldSel = '#'.$this->getId() . ' ';
+
+                if ('steps' === $where) {
+                    $stepIndex = $this->formStep + 1;
+                    $targetFieldSel .= '.form-step:nth-child(-'.$stepIndex.'n+'.$stepIndex.') ';
+                }
+
+                $targetFieldSel .= '.field-row:nth-child(-'.$index.'n+'.$index.')';
+
                 $this->formConditionals[] = [
                     'formId'            => '#'.$this->getId(),
-                    'targetFieldSel'    => '#'.$this->getId().' .field-row:nth-child(-'.$index.'n+'.$index.')',
+                    'targetFieldSel'    => $targetFieldSel,
                     'position'          => $index,
                     ...$field->getConditionalLogic()
                 ];
@@ -277,10 +319,10 @@ class Form {
     }
 
     /**
-     * Get form fields configurations.
+     * Get form step config.
      */
-    public function getFormFieldsConfig(): array {
-        return $this->formFieldsConfig;
+    public function getFormStepConfig(): array {
+        return $this->formStepConfig;
     }
 
     /**
@@ -288,6 +330,13 @@ class Form {
      */
     public function getFormStyle(): array {
         return $this->formStyle;
+    }
+
+    /**
+     * Get form wrap style.
+     */
+    public function getFormWrapStyle(): array {
+        return $this->formWrapStyle;
     }
 
     /**

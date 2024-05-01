@@ -30,7 +30,9 @@ class Fields {
         'month',
         'time',
         'week',
-        'password'
+        'password',
+        'paragraph',
+        'select'
     ];
 
 }

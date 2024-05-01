@@ -145,8 +145,11 @@ $form4 = Form::make('second-step-form', 'Choose contact')
     ->setDescription('Compile this form and you\'ll be recontacted!')
     ->setMethod('POST')
     ->setAction('/')
-    ->setWidth(50, '%')
+    ->setWrapWidth(50, '%')
+    ->setWidth(100, '%')
     ->setEncodingType('multipart/form-data')
+    ->showProgressBar(true)
+    ->showIndex(true)
     ->addStep([
         Field::make('text', 'fname', 'Il tuo nome'),
         Field::make('text', 'lname', 'Il tuo cognome')
@@ -169,7 +172,32 @@ $form4 = Form::make('second-step-form', 'Choose contact')
         Field::make('number', 'choose-number', 'Un numero a caso')
     ])
     ->addStep([
-        Field::make('color', 'user-color', 'Scegli un colore!')
+        Field::make('color', 'user-color-1', 'Scegli un colore!'),
+        Field::make('select', 'favourite-flavour', 'La tua fragranza preferita')
+            ->setWidth(50, '%')
+            ->setOptions([
+                'lemon' => 'Limone',
+                'peach' => 'Pesca'
+            ])
+            ->setConditionalLogic([
+                [
+                    'field' => 'user-color-1',
+                    'compare' => '=',
+                    'value' => '#ffffff'
+                ] 
+            ]),
+        Field::make('text', 'user-agent-name', 'Nome dell\'user agent')
+            ->setConditionalLogic([
+                [
+                    'field' => 'favourite-flavour',
+                    'compare' => '=',
+                    'value' => 'peach'
+                ]
+            ])
+    ])
+    ->addStep([
+        Field::make('paragraph', 'info-text', 'Clicca il pulsante qui sotto per inviare il tuo modulo'),
+        Field::make('submit', 'submit-form', 'Invia!')
     ]);
 
 return [$form1, $form2, $form3, $form4];
