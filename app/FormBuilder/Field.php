@@ -26,11 +26,6 @@ class Field {
     private string $name = '';
 
     /**
-     * Is required?
-     */
-    private bool $required = false;
-
-    /**
      * Field label.
      */
     private ?string $label = NULL;
@@ -53,7 +48,7 @@ class Field {
     /**
      * Make a field.
      */
-    public static function make(string $type, string $name, ?string $label = NULL, bool $required = false) {
+    public static function make(string $type, string $name, ?string $label = NULL) {
         if ( empty($type) ) {
             throw new \Exception('You must specify a field type as first parameter');
         }

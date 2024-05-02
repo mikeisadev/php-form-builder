@@ -3,6 +3,10 @@
 use App\FormBuilder\Form;
 use App\FormBuilder\Field;
 
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
+
 // Form 1.
 $form1 = Form::make('another-form', 'Contact me')
     ->setDescription('Compile this form and you\'ll be recontacted!')
@@ -11,7 +15,8 @@ $form1 = Form::make('another-form', 'Contact me')
     ->setWidth(50, '%')
     ->setEncodingType('multipart/form-data')
     ->addFields([
-        Field::make('checkbox', 'select-name', 'Seleziona personaggi', true)
+        Field::make('checkbox', 'select-name', 'Seleziona personaggi')
+            ->required(true)
             ->setWidth(33, '%')
             ->setOptions([
                 'michele' => 'Michele',

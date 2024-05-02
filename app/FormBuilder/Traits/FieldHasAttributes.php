@@ -61,4 +61,11 @@ trait FieldHasAttributes {
         return property_exists($this, 'acceptedExts') ? (!empty($this->acceptedExts) ? true : false) : false;
     }
 
+    /**
+     * Field has required function?
+     */
+    public function hasRequired() {
+        return property_exists($this, 'required') ? true : false;
+    }
+
 }

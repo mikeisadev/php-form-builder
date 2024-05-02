@@ -4,10 +4,11 @@ namespace App\FormBuilder\Fields;
 
 use App\FormBuilder\Field;
 use App\FormBuilder\Traits\FieldHasPlaceholder;
+use App\FormBuilder\Traits\FieldHasRequired;
 
 class Textarea_Field extends Field {
 
-    use FieldHasPlaceholder;
+    use FieldHasPlaceholder, FieldHasRequired;
 
     private ?string $rows = NULL;
 

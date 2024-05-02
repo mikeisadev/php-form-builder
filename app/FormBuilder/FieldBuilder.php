@@ -20,9 +20,9 @@ abstract class FieldBuilder {
 
         $html = (string) '';
 
-        // echo "<pre>";
-        // print_r($field->getConditionalLogic());
-        // echo "</pre>";
+        echo "<pre>";
+        print_r($field);
+        echo "</pre>";
 
         // Build single field.
         $html .= '<div class="field-row field';
@@ -74,11 +74,13 @@ abstract class FieldBuilder {
         $type = $options->getType() === 'datetime' ? 'datetime-local' : $options->getType();
 
         $field = '<input type="' . $type . '" id="' . $options->getId() . '" ';
-        $field .= $options->getName() ? 'name="' . $options->getName() . '"' : '';
+        $field .= $options->getName() ? 'name="' . $options->getName() . '" ' : '';
 
-        $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '"' : null;
-        $field .= $options->hasValue() ? 'value="' . $options->getValue() . '"' : null;
-        $field .= $options->hasAcceptedExts() ? 'accept="' . implode(',', $options->getAcceptedExts()) . '"' : null;
+        $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '" ' : null;
+        $field .= $options->hasValue() ? 'value="' . $options->getValue() . '" ' : null;
+        $field .= $options->hasAcceptedExts() ? 'accept="' . implode(',', $options->getAcceptedExts()) . '" ' : null;
+
+        $field .= $options->hasRequired() ? ( $options->getRequired() ? 'required' : null ) : null;
 
         $field .= '>';
         
@@ -89,13 +91,15 @@ abstract class FieldBuilder {
      * Build an option field (checkbox or radio)
      */
     protected static function buildOptionsField(Field $options): string {
-        $field = '<div class="' . $options->getType() . '-field">';
+        $type = $options->getType();
+
+        $field = '<div class="' . $type . '-field">';
 
         foreach ($options->getOptions() as $value => $label) {
             $id = Str::random('f_');
 
-            $field .= '<div class="' . $options->getType() . '-option">';
-                $field .= '<input type="' . $options->getType() . '" id="' . $id . '" name="' . $options->getName() . '" value="' . $value . '">';
+            $field .= '<div class="' . $type . '-option">';
+                $field .= '<input type="' . $type . '" id="' . $id . '" name="' . $options->getName() . ($type === 'checkbox' ? '[]' : null) . '" value="' . $value . '">';
                 $field .= '<label for="' . $id . '">' . $label . '</label>';
             $field .= '</div>';
         }
