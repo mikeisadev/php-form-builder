@@ -9,4 +9,16 @@ use App\FormBuilder\Fields\Text_Field;
  */
 class Email_Field extends Text_Field {
 
+    protected array $attributes = [
+        'autocomplete'      => false,
+        'placeholder'       => '',
+        'required'          => false,
+        'disabled'          => false,
+        'multiple'          => false,
+        'pattern'           => '',
+        'maxlength'         => '',
+        'minlength'         => '',
+        'size'              => ''
+    ];
+
 }

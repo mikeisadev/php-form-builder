@@ -2,12 +2,22 @@
 
 namespace App\FormBuilder\Fields;
 
-use App\FormBuilder\Field;
 use App\FormBuilder\Fields\Text_Field;
 
 /**
  * Extend text field.
  */
-class Search_Field extends Text_Field {
+class Password_Field extends Text_Field {
+
+    protected array $attributes = [
+        'autocomplete'      => false,
+        'placeholder'       => '',
+        'required'          => false,
+        'disabled'          => false,
+        'maxlength'         => '',
+        'minlength'         => '',
+        'pattern'           => '',
+        'size'              => ''
+    ];
 
 }

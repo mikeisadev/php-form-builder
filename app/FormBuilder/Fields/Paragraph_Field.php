@@ -6,4 +6,6 @@ use App\FormBuilder\Field;
 
 class Paragraph_Field extends Field {
 
+    protected array $attributes = [];
+
 }

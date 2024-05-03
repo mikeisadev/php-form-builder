@@ -46,6 +46,11 @@ class Field {
     private ?array $conditionalLogic = NULL;
 
     /**
+     * Field attributes.
+     */
+    protected array $attributes = [];
+
+    /**
      * Make a field.
      */
     public static function make(string $type, string $name, ?string $label = NULL) {
@@ -111,6 +116,59 @@ class Field {
 
         return $this;
     }  
+
+    /**
+     * Set a field attribute.
+     */
+    public function setAttribute(string $attribute, string $value): self {
+        if ( !$this->_hasAttribute($attribute) ) {
+            throw new \Exception('You cannot set the attribute: "' . $attribute . '" for this field.');
+        }
+
+        $this->attributes[$attribute] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get an attribute of the field.
+     */
+    public function getAttribute(string $attribute) {
+        if ( !$this->_hasAttribute($attribute) ) {
+            throw new \Exception('The "' . $attribute . '" is not a supported attribute for this field.');
+        }
+
+        return $this->attributes[$attribute];
+    }
+
+    /**
+     * Get all attributes of the field.
+     */
+    public function getAllAttributes() {
+        return $this->attributes;
+    }
+
+    /**
+     * Check if the field has attribute.
+     * 
+     * This function is used only in this class.
+     */
+    private function _hasAttribute(string $attribute): bool {
+        return array_key_exists($attribute, $this->attributes);
+    }
+
+    /**
+     * Check if the field has attribute and it's not empty!
+     * 
+     * Used for HTML rendering purposes!
+     */
+    public function hasAttribute(string $attribute): bool {
+        if ( $this->_hasAttribute($attribute) ) {
+            return !empty( $this->getAttribute($attribute) );
+        }
+
+        return false;
+    }
 
     /**
      * Set conditional logic.

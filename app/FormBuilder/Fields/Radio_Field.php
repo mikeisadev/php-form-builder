@@ -4,10 +4,15 @@ namespace App\FormBuilder\Fields;
 
 use App\FormBuilder\Field;
 use App\FormBuilder\Traits\FieldHasOptions;
-use App\FormBuilder\Traits\FieldHasRequired;
 
 class Radio_Field extends Field {
 
-    use FieldHasOptions, FieldHasRequired;
+    use FieldHasOptions;
+
+    protected array $attributes = [
+        'autocapitalize'    => false,
+        'required'          => false,
+        'disabled'          => false
+    ];
 
 }

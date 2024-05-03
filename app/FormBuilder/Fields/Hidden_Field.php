@@ -3,11 +3,15 @@
 namespace App\FormBuilder\Fields;
 
 use App\FormBuilder\Field;
-use App\FormBuilder\Traits\FieldHasValue;
 
 class Hidden_Field extends Field {
 
-    use FieldHasValue;
+    protected array $attributes = [
+        'autocomplete'      => false,
+        'autocapitalize'    => false,
+        'value'             => '',
+        'disabled'          => false
+    ];
 
     // Hidden fields cannot have label!
     protected bool $hasLabel = false;

@@ -3,9 +3,9 @@
 use App\FormBuilder\Form;
 use App\FormBuilder\Field;
 
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
+// echo "<pre>";
+// print_r($_POST);
+// echo "</pre>";
 
 // Form 1.
 $form1 = Form::make('another-form', 'Contact me')
@@ -15,26 +15,28 @@ $form1 = Form::make('another-form', 'Contact me')
     ->setWidth(50, '%')
     ->setEncodingType('multipart/form-data')
     ->addFields([
+        Field::make('image', 'button-image', 'Button image test')
+            ->setAttribute('src', 'hejffiej')
+            ->setAttribute('alt', 'Alttag!'),
         Field::make('checkbox', 'select-name', 'Seleziona personaggi')
-            ->required(true)
             ->setWidth(33, '%')
             ->setOptions([
-                'michele' => 'Michele',
-                'francesco' => 'Francesco'
+                'michele' => ['value' => 'Michele', 'checked' => true],
+                'francesco' => ['Francesco', true]
             ]),
         Field::make('text', 'name', 'label')
             ->setWidth(33, '%')
-            ->setPlaceholder('dj'),
+            ->setAttribute('placeholder', 'dj'),
         Field::make('textarea', 'message', 'Il tuo messaggio')
             ->setWidth(33, '%')
-            ->setPlaceholder('fuck')
-            ->setCols(50)
-            ->setRows(20),
+            ->setAttribute('placeholder', 'fuck')
+            ->setAttribute('rows', 20)
+            ->setAttribute('cols', 50),
         Field::make('radio', 'my-radio', 'Seleziona un\'opzione')
             ->setWidth(33, '%')
             ->setOptions([
-                'option1' => 'Opzione 1',
-                'option2' => 'Opzione2'
+                'option1' => ['Opzione 1'],
+                'option2' => ['Opzione2', true]
             ]),
         Field::make('email', 'email', 'Your email')
             ->setConditionalLogic([
@@ -45,7 +47,7 @@ $form1 = Form::make('another-form', 'Contact me')
                 ]
             ]),
         Field::make('color', 'yourFavouriteColor', 'Your color')
-            ->setValue('#000ccc')
+            ->setAttribute('value', '#000ccc')
             ->setConditionalLogic([
                 'relation' => 'OR',
                 [
@@ -65,9 +67,9 @@ $form1 = Form::make('another-form', 'Contact me')
                 ]
             ]),
         Field::make('date', 'start-date', 'Select a start date')
-            ->setValue('2027-04-27'),
+            ->setAttribute('value','2027-04-27'),
         Field::make('datetime', 'start-datetime', 'Select a start date and time')
-            ->setValue('2027-04-27T14:30:00'),
+            ->setAttribute('value', '2027-04-27T14:30:00'),
         Field::make('week', 'start-datetime', 'Select a start date and time')
             ->setWidth(50, '%'),
         Field::make('time', 'start-datetime', 'Select a start date and time')
@@ -76,22 +78,23 @@ $form1 = Form::make('another-form', 'Contact me')
         Field::make('reset', 'reset'),
         Field::make('search', 'reset')
             ->setWidth(50, '%')
-            ->setPlaceholder('Search something...'),
+            ->setAttribute('placeholder', 'Search something...'),
         Field::make('number', 'random')
             ->setWidth(50, '%')
-            ->setPlaceholder('Select a number'),
+            ->setAttribute('placeholder', 'Select a number'),
         Field::make('file', 'attachments')
             ->setWidth(50, '%')
-            ->setAcceptedExts([
-                'application/pdf'
-            ]),
+            ->setAttribute('accept', 'application/pdf'),
         Field::make('url', 'your-website', 'Insert your website url'),
         Field::make('range', 'range', 'Select a range')
-            ->setWidth(50, '%'),
-        Field::make('hidden', 'csrf-token', 'Hhdh')
-            ->setValue(bin2hex(random_bytes(5))),
+            ->setWidth(50, '%')
+            ->setAttribute('step', 10)
+            ->setAttribute('min', 0)
+            ->setAttribute('max', 50),
+        Field::make('hidden', 'csrf-token')
+            ->setAttribute('value', bin2hex(random_bytes(5))),
         Field::make('submit', 'rg')
-            ->setValue('Submit form')
+            ->setAttribute('value', 'Submit form')
     ]);
 
 // Form 2.

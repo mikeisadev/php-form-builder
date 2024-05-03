@@ -3,11 +3,18 @@
 namespace App\FormBuilder\Fields;
 
 use App\FormBuilder\Field;
-use App\FormBuilder\Traits\FieldHasPlaceholder;
-use App\FormBuilder\Traits\FieldHasRequired;
 
 class Text_Field extends Field {
 
-    use FieldHasPlaceholder, FieldHasRequired;
+    protected array $attributes = [
+        'autocapitalize'    => false,
+        'autocomplete'      => false,
+        'placeholder'       => '',
+        'required'          => false,
+        'disabled'          => false,
+        'pattern'           => '',
+        'readonly'          => false,
+        'size'              => ''
+    ];
 
 }

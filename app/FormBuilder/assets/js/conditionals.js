@@ -27,20 +27,25 @@ if (formConditionals.length > 0) {
             switches[key] = false;
 
             const controllerField = (() => {
-                if (document.querySelector(`input[name=${field}]`)) {
-                    return document.querySelectorAll(`input[name=${field}]`);
-                } else if (document.querySelector(`textarea[name=${field}]`)) {
-                    return document.querySelectorAll(`textarea[name=${field}]`);
-                } else {
-                    return document.querySelectorAll(`select[name=${field}]`);
+                switch (true) {
+                    case Boolean(document.querySelector(`input[name=${field}]`)):
+                        return document.querySelectorAll(`input[name=${field}]`);
+                    case Boolean(document.querySelector(`input[name='${field}[]']`)):
+                        return document.querySelectorAll(`input[name="${field}[]"]`);
+                    case Boolean(document.querySelector(`textarea[name=${field}]`)):
+                        return document.querySelectorAll(`textarea[name=${field}]`);
+                    case Boolean(document.querySelector(`select[name=${field}]`)):
+                        return document.querySelectorAll(`select[name=${field}]`);
                 }
             })()
+
+            console.log(controllerField);
 
             controllerField.forEach(field => {
                 const fieldType = field.getAttribute('type');
                 const tagName = field.tagName
 
-                console.log(field)
+                // console.log(field)
 
                 field.addEventListener('input', e => {
                     switch(true) {
@@ -109,7 +114,7 @@ if (formConditionals.length > 0) {
 
             // console.log(status, switches, targetField, relation)
 
-            console.log(targetField, status, switches)
+            // console.log(targetField, status, switches)
 
             // Reveal the field based on "status"
             if (status) {

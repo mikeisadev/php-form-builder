@@ -11,6 +11,16 @@ use App\Utils\Str;
 abstract class FieldBuilder {
 
     /**
+     * List of attributes with no value.
+     */
+    private static array $noValueAttributes = ['required', 'readonly', 'disabled', 'checked', 'multiple'];
+
+    /**
+     * List of keys for options field.
+     */
+    private static array $optionKeys = ['value', 'checked'];
+
+    /**
      * Build field row.
      */
     protected static function buildFieldRow(Field $field): string {
@@ -20,9 +30,9 @@ abstract class FieldBuilder {
 
         $html = (string) '';
 
-        echo "<pre>";
-        print_r($field);
-        echo "</pre>";
+        // echo "<pre>";
+        // print_r($field->getAllAttributes());
+        // echo "</pre>";
 
         // Build single field.
         $html .= '<div class="field-row field';
@@ -73,14 +83,10 @@ abstract class FieldBuilder {
     protected static function buildField(Field $options): string {
         $type = $options->getType() === 'datetime' ? 'datetime-local' : $options->getType();
 
-        $field = '<input type="' . $type . '" id="' . $options->getId() . '" ';
-        $field .= $options->getName() ? 'name="' . $options->getName() . '" ' : '';
+        $field = '<input type="' . $type . '" id="' . $options->getId() . '" name="' . $options->getName() . '" ';
 
-        $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '" ' : null;
-        $field .= $options->hasValue() ? 'value="' . $options->getValue() . '" ' : null;
-        $field .= $options->hasAcceptedExts() ? 'accept="' . implode(',', $options->getAcceptedExts()) . '" ' : null;
-
-        $field .= $options->hasRequired() ? ( $options->getRequired() ? 'required' : null ) : null;
+        // Build attributes.
+        $field .= static::buildFieldAttributes( $options->getAllAttributes() );
 
         $field .= '>';
         
@@ -97,10 +103,29 @@ abstract class FieldBuilder {
 
         foreach ($options->getOptions() as $value => $label) {
             $id = Str::random('f_');
+            $checked = false;
+            $_label = '';
+
+            if (is_array($label)) {
+                $_label = array_key_exists('value', $label) ? $label['value'] : ( count($label) >= 1 ? $label[0] : '');
+                $checked = array_key_exists('checked', $label) ? $label['checked'] : ( count($label) === 2 ? $label[1] : false );
+            }
+
+            if (is_string($label)) {
+                $_label = $label;
+            }
 
             $field .= '<div class="' . $type . '-option">';
-                $field .= '<input type="' . $type . '" id="' . $id . '" name="' . $options->getName() . ($type === 'checkbox' ? '[]' : null) . '" value="' . $value . '">';
-                $field .= '<label for="' . $id . '">' . $label . '</label>';
+                $field .= '<input type="' . $type . '" id="' . $id . '" name="' . $options->getName() . ($type === 'checkbox' ? '[]' : null) . '" value="' . $value . '" ';
+
+                // Build attributes.
+                $field .= static::buildFieldAttributes( $options->getAllAttributes() );
+
+                // If checked, add flag.
+                $field .= $checked ? 'checked' : null;
+
+                $field .='>';
+                $field .= '<label for="' . $id . '">' . $_label . '</label>';
             $field .= '</div>';
         }
 
@@ -114,10 +139,10 @@ abstract class FieldBuilder {
      */
     protected static function buildTextareaField(Field $options): string {
         $field = '<textarea id="' . $options->getId() . '" ';
-        $field .= $options->getName() ? 'name="' . $options->getName() . '" ' : '';
-        $field .= $options->hasPlaceholder() ? 'placeholder="' . $options->getPlaceholder() . '" ' : '';
-        $field .= $options->getRows() ? 'rows="' . $options->getRows() . '" ' : '';
-        $field .= $options->getCols() ? 'cols="' . $options->getCols() . '" ' : '';
+        $field .= 'name="' . $options->getName() . '" ';
+
+        $field .= static::buildFieldAttributes( $options->getAllAttributes() );
+
         $field .= '>'; 
         $field .= '</textarea>';
 
@@ -139,13 +164,37 @@ abstract class FieldBuilder {
      * Build a select field.
      */
     private static function buildSelectField(Field $options): string {
-        $field = '<select id="' . $options->getId() . '" name="' . $options->getName() . '">';
+        $field = '<select id="' . $options->getId() . '" name="' . $options->getName() . '" ';
+        $field .= static::buildFieldAttributes( $options->getAllAttributes() );
+        $field .= '>';
+
         foreach ($options->getOptions() as $value => $label) {
             $field .= '<option value="'. $value .'">'. $label .'</option>';
         }
         $field .= '</select>';
 
         return $field;
+    }
+
+    /**
+     * Build field attributes.
+     */
+    private static function buildFieldAttributes(array $attributes): string {
+        $attrs = '';
+
+        if ( empty($attributes) ) {
+            return $attrs;
+        }
+
+        foreach ($attributes as $attribute => $value) {
+            if ( in_array($attribute, static::$noValueAttributes) ) {
+                $attrs .= $value ? "{$attribute} " : NULL;
+            } else { 
+                $attrs .= $value ? "{$attribute}='{$value}' " : NULL;
+            }
+        }
+
+        return $attrs;
     }
 
 }
