@@ -1,0 +1,148 @@
+/* Bootstrap theme */
+:root {
+    --primary-bg: #0d6efd;
+    --secondary-bg: #6c757d;
+    --hover-primary-bg-btn: #0a58ca;
+    --hover-secondary-bg-btn: #565e64;
+    --white-color: #ffffff;
+    --white-bg: #ffffff;
+    --light-gray-bg: #e9ecef;
+    --input-border-color: #dee2e6;
+    --input-text-color: #212529;
+    --focus-input-border-color: #86b7fe;
+}
+
+.pfmb-form-wrap input[type="submit"], .pfmb-form-wrap .action-bar-wrap .form-next {
+    background: var(--primary-bg);
+    border-color: var(--primary-bg);
+    color: #ffffff;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    border-radius: .375rem;
+    font-weight: 400;
+    transition: 200ms all;
+}
+
+.pfmb-form-wrap input[type="submit"]:hover, .pfmb-form-wrap .action-bar-wrap .form-next:hover, .pfmb-form-wrap input[type="reset"]:hover, .pfmb-form-wrap input[type="button"]:hover {
+    background: var(--hover-primary-bg-btn);
+    border-color: var(--hover-primary-bg-btn);
+    color: var(--white-color);
+}
+
+.pfmb-form-wrap input[type="color"] {
+    background: var(--input-border-color);
+    border-radius: .375rem;
+    border: 1px solid var(--input-border-color);
+    cursor: pointer;
+}
+
+.pfmb-form-wrap input[type="checkbox"] {
+    border-radius: .275rem;
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgba(0,0,0,.25);
+    cursor: pointer;
+    vertical-align: top;
+    appearance: none;
+}
+
+.pfmb-form-wrap input[type="checkbox"]:checked {
+    background-color: var(--primary-bg);
+    border-color: var(--primary-bg);
+    color: var(--white-bg);
+}
+
+.pfmb-form-wrap input[type="radio"] {
+    width: 1rem;
+    height: 1rem;
+    border: 1px solid rgba(0,0,0,.25);
+    border-radius: 50%;
+    cursor: pointer;
+    vertical-align: top;
+    appearance: none;
+    clip-path: none;
+}
+
+.pfmb-form-wrap input[type="radio"]:checked {
+    width: 1rem;
+    height: 1rem;
+    border: 4px solid var(--primary-bg) !important;
+    background-color: #ffffff;
+    cursor: pointer;
+    vertical-align: top;
+    appearance: none;
+}
+
+.pfmb-form-wrap label {
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.pfmb-form-wrap .action-bar-wrap .form-back {
+    background: var(--secondary-bg);
+    border-color: var(--secondary-bg);
+    color: #ffffff;
+    border: none;
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    border-radius: .375rem;
+    font-weight: 400;
+    transition: 200ms all;
+}
+
+.pfmb-form-wrap .action-bar-wrap .form-back:hover {
+    background: var(--hover-secondary-bg-btn);
+    border-color: var(--hover-secondary-bg-btn);
+}
+
+.pfmb-form-wrap input[type="reset"], .pfmb-form-wrap input[type="button"] {
+    background: var(--white-bg);
+    border: 1px solid var(--primary-bg);
+    color: var(--primary-bg);
+    font-size: 1rem;
+    line-height: 1.5;
+    padding: .375rem .75rem;
+    border-radius: .375rem;
+    font-weight: 400;
+    transition: 200ms all;
+}
+
+.pfmb-form-wrap input:not([type="radio"], [type="checkbox"], [type="color"], [type="submit"], [type="reset"], [type="button"], [type="file"], [type="image"], [type="range"]), textarea, select {
+    border-radius: .375rem;
+    border: solid 1px var(--input-border-color);
+    width: 100%;
+    padding: .375rem .75rem !important;
+    line-height: 1.5;
+    font-size: 1rem;
+    color: var(--input-text-color);
+    font-weight: 400;
+    transition: 200ms all;
+}
+
+.pfmb-form-wrap input:not([type="color"], [type="submit"], [type="reset"], [type="button"], [type="file"], [type="image"], [type="range"]):focus, textarea:focus, select:focus {
+    outline: 0;
+    box-shadow: 0 0 0 .25rem rgba(13,110,253,.25);
+    border-color: var(--focus-input-border-color);
+}
+
+.pfmb-form-wrap .progress-bar-wrap {
+    background: var(--light-gray-bg);
+}
+
+.pfmb-form-wrap .progress-bar-wrap .progress-bar {
+    height: auto;
+    background: var(--primary-bg);
+    transition: width 300ms;
+}
+
+.pfmb-form-wrap .progress-bar .indicator {
+    color: var(--white-color);
+}
+
+.pfmb-form-wrap :disabled {
+    opacity: 0.65;
+    pointer-events: none;
+}

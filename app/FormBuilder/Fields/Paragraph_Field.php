@@ -8,4 +8,6 @@ class Paragraph_Field extends Field {
 
     protected array $attributes = [];
 
+    protected bool $hasLabel = false;
+
 }

@@ -47,7 +47,9 @@ class FormBuilder extends FieldBuilder {
 
             if ($formStepConfig['progressBar']) {
                 $html .= '<div class="progress-bar-wrap">';
-                $html .= '<div class="progress-bar" style="width: 0%;"></div>';
+                $html .= '<div class="progress-bar" style="width: 0%;">';
+                $html .= $formStepConfig['showPercentage'] ? '<span class="indicator">0%</span>' : null;
+                $html .= '</div>';
                 $html .= '</div>';
             }
         }

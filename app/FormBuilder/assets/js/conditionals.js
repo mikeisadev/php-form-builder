@@ -1,10 +1,12 @@
-if (formConditionals.length > 0) {
+if (formConditionals?.length > 0) {
     for (let i = 0; i < formConditionals.length; i++) {
         // Prepare a switches object for each condition.
         const switches = {};
 
         // Get conditions.
         const conditions = formConditionals[i];
+
+        console.log(formConditionals)
 
         // Get major info.
         const {targetFieldSel, relation, formId} = conditions;
@@ -21,8 +23,13 @@ if (formConditionals.length > 0) {
         // Target field.
         const targetField = document.querySelector(targetFieldSel);
 
+        // Do we have any "reset" buttons inside the form?
+        const resetBtn = formContainer?.querySelector('input[type="reset"]') ?? null;
+ 
         // Get each condition.
         Object.keys(conditions).forEach((key) => {
+            // let compare = null;
+            
             const {compare, field, value} = conditions[key];
             switches[key] = false;
 
@@ -50,7 +57,7 @@ if (formConditionals.length > 0) {
                 field.addEventListener('input', e => {
                     switch(true) {
                         case 'checkbox' === fieldType:
-                            if (value === e.target.value) {
+                            if (value === e.target.value || 'boolean' === typeof value) {
                                 switches[key] = e.target.checked;
                             }
                             break;
@@ -123,5 +130,10 @@ if (formConditionals.length > 0) {
                 targetField.classList.add('hidden')
             }
         })
+
+        // Listen to the reset button.
+        resetBtn?.addEventListener('click', () => {
+            targetField.classList.add('hidden');
+        });
     }
 }

@@ -1,6 +1,6 @@
 if (formConfig.length > 0) {
     for (let i = 0; i < formConfig.length; i++) {
-        const {formId, initialStep, totalSteps} = formConfig[i];
+        const {formId, initialStep, totalSteps, showPercentage} = formConfig[i];
 
         let currentStep = initialStep;
         let progressBar = null;
@@ -22,14 +22,14 @@ if (formConfig.length > 0) {
 
         goBackBtn.setAttribute('disabled', true);
 
-        setTimeout(() => updateProgressBar(progressBar, currentStep, totalSteps), 500)
+        setTimeout(() => updateProgressBar(progressBar, currentStep, totalSteps, showPercentage), 500)
 
         goNextBtn.addEventListener('click', e => {
             if (currentStep < totalSteps) {
                 currentStep++;
             }
 
-            updateProgressBar(progressBar, currentStep, totalSteps);
+            updateProgressBar(progressBar, currentStep, totalSteps, showPercentage);
             showOneStep(formSteps, currentStep);
             updateFormCurrentStep(formCurrStep, currentStep);
 
@@ -47,7 +47,7 @@ if (formConfig.length > 0) {
                 currentStep--;
             }
 
-            updateProgressBar(progressBar, currentStep, totalSteps);
+            updateProgressBar(progressBar, currentStep, totalSteps, showPercentage);
             showOneStep(formSteps, currentStep);
             updateFormCurrentStep(formCurrStep, currentStep);
 
@@ -65,9 +65,15 @@ if (formConfig.length > 0) {
     }
 
     // Update progress bar.
-    function updateProgressBar(progressBar, currentStep, totalSteps) {
+    function updateProgressBar(progressBar, currentStep, totalSteps, showPercentage = false) {
+        const percentage = (currentStep / totalSteps) * 100;
+
         if (progressBar) {
-            progressBar.style.width = `${(currentStep / totalSteps) * 100}%`
+            progressBar.style.width = `${percentage}%`;
+        }
+
+        if (showPercentage) {
+            progressBar.querySelector('.indicator').innerText = `${Math.trunc(percentage)}%`;
         }
     }
 

@@ -85,6 +85,11 @@ class Field {
         $this->setType($type);
         $this->setName($name);
         $this->setLabel($label);
+
+        // For checkbox start without labels.
+        if ('checkbox' === $type) {
+            $this->hasLabel = false;
+        }
     }
 
     /**
@@ -181,6 +186,12 @@ class Field {
         } else {
             if ( !in_array($logic['relation'], $relations) ) {
                 throw new \Exception('Invalid relation inside conditional logic!');
+            }
+        }
+
+        foreach ($logic as $index => $conf) {
+            if (is_array($conf) && !array_key_exists('compare', $conf)) {
+                $logic[$index]['compare'] = '=';
             }
         }
 

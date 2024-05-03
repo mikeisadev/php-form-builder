@@ -31,7 +31,8 @@ $form1 = Form::make('another-form', 'Contact me')
             ->setWidth(33, '%')
             ->setAttribute('placeholder', 'fuck')
             ->setAttribute('rows', 20)
-            ->setAttribute('cols', 50),
+            ->setAttribute('cols', 50)
+            ->setAttribute('disabled', true),
         Field::make('radio', 'my-radio', 'Seleziona un\'opzione')
             ->setWidth(33, '%')
             ->setOptions([
@@ -158,9 +159,35 @@ $form4 = Form::make('second-step-form', 'Choose contact')
     ->setEncodingType('multipart/form-data')
     ->showProgressBar(true)
     ->showIndex(true)
+    ->showPercentage(false)
     ->addStep([
-        Field::make('text', 'fname', 'Il tuo nome'),
+        Field::make('checkbox', 'acceptance', 'Accetto la privacy policy di questo sito'),
+        Field::make('checkbox', 'greet', 'Seleziona un saluto')
+            ->setOptions([
+                'g' => 'Giao',
+                'c' => 'Ciao'
+            ]),
+        Field::make('text', 'fname', 'Il tuo nome')
+            ->setConditionalLogic([
+                [
+                    'field' => 'acceptance',
+                    'value' => true
+                ]
+            ]),
         Field::make('text', 'lname', 'Il tuo cognome')
+            ->setConditionalLogic([
+                'relation' => 'AND',
+                [
+                    'field' => 'greet',
+                    'compare' => '=',
+                    'value' => 'g'
+                ],
+                [
+                    'field' => 'greet',
+                    'compare' => '=',
+                    'value' => 'c'
+                ]
+            ])
     ])
     ->addStep([
         Field::make('email', 'email-address', 'Il tuo indirizzo email'),
@@ -201,7 +228,8 @@ $form4 = Form::make('second-step-form', 'Choose contact')
                     'compare' => '=',
                     'value' => 'peach'
                 ]
-            ])
+            ]),
+        Field::make('reset', 'Reset all!')
     ])
     ->addStep([
         Field::make('paragraph', 'info-text', 'Clicca il pulsante qui sotto per inviare il tuo modulo'),

@@ -16,11 +16,6 @@ abstract class FieldBuilder {
     private static array $noValueAttributes = ['required', 'readonly', 'disabled', 'checked', 'multiple'];
 
     /**
-     * List of keys for options field.
-     */
-    private static array $optionKeys = ['value', 'checked'];
-
-    /**
      * Build field row.
      */
     protected static function buildFieldRow(Field $field): string {
@@ -31,18 +26,17 @@ abstract class FieldBuilder {
         $html = (string) '';
 
         // echo "<pre>";
-        // print_r($field->getAllAttributes());
+        // print_r($field);
         // echo "</pre>";
 
         // Build single field.
         $html .= '<div class="field-row field';
         $html .= FieldClasses::fieldWidthExists($field->getWidth()) ? ' ' . FieldClasses::getWidthClass($field->getWidth()) : '';
         $html .= $field->getConditionalLogic() ? ' hidden' : '';
+        $html .= 'hidden' === $field->getType() ? ' hidden-field' : '';
         $html .= '">';
-            if ( 'paragraph' !== $field->getType() ) {
-                $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
-            }
-
+            $html .= $field->hasLabel() ? '<label for="' . $field->getId() . '">'. $field->getLabel() .'</label>' : '';
+        
             $html .= static::dispatchField($field);
         $html .= '</div>';
 
@@ -98,37 +92,72 @@ abstract class FieldBuilder {
      */
     protected static function buildOptionsField(Field $options): string {
         $type = $options->getType();
+        $opts = $options->getOptions(); 
 
         $field = '<div class="' . $type . '-field">';
 
-        foreach ($options->getOptions() as $value => $label) {
-            $id = Str::random('f_');
-            $checked = false;
-            $_label = '';
-
-            if (is_array($label)) {
-                $_label = array_key_exists('value', $label) ? $label['value'] : ( count($label) >= 1 ? $label[0] : '');
-                $checked = array_key_exists('checked', $label) ? $label['checked'] : ( count($label) === 2 ? $label[1] : false );
+        if ($opts) {
+            foreach ($opts as $value => $label) {
+                $checked = false;
+                $_label = '';
+    
+                if (is_array($label)) {
+                    $_label = array_key_exists('value', $label) ? $label['value'] : ( count($label) >= 1 ? $label[0] : '');
+                    $checked = array_key_exists('checked', $label) ? $label['checked'] : ( count($label) === 2 ? $label[1] : false );
+                }
+    
+                if (is_string($label)) {
+                    $_label = $label;
+                }
+    
+                $field .= static::buildOption(
+                    $type, 
+                    $options->getName(),
+                    $value,
+                    $_label,
+                    $checked,
+                    $options->getAllAttributes(),
+                    true
+                );
             }
-
-            if (is_string($label)) {
-                $_label = $label;
-            }
-
-            $field .= '<div class="' . $type . '-option">';
-                $field .= '<input type="' . $type . '" id="' . $id . '" name="' . $options->getName() . ($type === 'checkbox' ? '[]' : null) . '" value="' . $value . '" ';
-
-                // Build attributes.
-                $field .= static::buildFieldAttributes( $options->getAllAttributes() );
-
-                // If checked, add flag.
-                $field .= $checked ? 'checked' : null;
-
-                $field .='>';
-                $field .= '<label for="' . $id . '">' . $_label . '</label>';
-            $field .= '</div>';
         }
 
+        if (!$opts && 'checkbox' === $type) {
+            $field .= static::buildOption(
+                $type,
+                $options->getName(),
+                null,
+                $options->getLabel(),
+                false,
+                $options->getAllAttributes(),
+                false
+            );
+        }
+
+        $field .= '</div>';
+
+        return $field;
+    }
+
+    /**
+     * Build single option.
+     */
+    private static function buildOption(string $type, string $name, ?string $value, string $label, bool $checked, array $attributes, bool $multiple): string {
+        $id = Str::random('f_');
+
+        $field = '';
+
+        $field .= '<div class="' . $type . '-option">';
+        $field .= '<input type="' . $type . '" id="' . $id . '" name="' . $name . ($type === 'checkbox' && $multiple ? '[]' : null) . '"' . ($value ? 'value="' . $value . '"' : '') . ' ';
+
+        // Build attributes.
+        $field .= static::buildFieldAttributes( $attributes );
+
+        // If checked, add flag.
+        $field .= $checked ? 'checked' : null;
+
+        $field .='>';
+        $field .= '<label for="' . $id . '">' . $label . '</label>';
         $field .= '</div>';
 
         return $field;
@@ -154,7 +183,7 @@ abstract class FieldBuilder {
      */
     protected static function buildParagraphField(Field $options): string {
         $field = '<p id="'. $options->getId() .'" p-name="' . $options->getName() . '">';
-        $field .= $options->hasLabel() ? $options->getLabel() : '';
+        $field .= $options->getLabel() ? $options->getLabel() : '';
         $field .= '</p>';
 
         return $field;

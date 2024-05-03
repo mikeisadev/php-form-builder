@@ -51,8 +51,9 @@ class Form {
      * Form with steps config.
      */
     private array $formStepConfig = [
-        'progressBar' => false,
-        'stepIndex'   => true,
+        'progressBar'       => false,
+        'stepIndex'         => true,
+        'showPercentage'    => false
     ];
 
     /**
@@ -199,6 +200,15 @@ class Form {
      */
     public function showProgressBar(bool $visibility): self {
         $this->formStepConfig['progressBar'] = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * Show progress bar percentage?
+     */
+    public function showPercentage(bool $visibility): self {
+        $this->formStepConfig['showPercentage'] = $visibility;
 
         return $this;
     }

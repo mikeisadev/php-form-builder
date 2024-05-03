@@ -17,6 +17,12 @@
     width: 100%;
 }
 
+.pfmb-form .hidden-field {
+    display: none;
+    margin: 0px;
+    padding: 0px;
+}
+
 .pfmb-form .field-row p {
     margin: 0px;
 }
@@ -32,6 +38,15 @@
     justify-content: space-between;
 }
 
+.pfmb-form-wrap .action-bar-wrap .actions {
+    display: flex;
+    gap: 15px;
+}
+
+.pfmb-form-wrap .action-bar-wrap .actions button, .pfmb-form input[type="submit"], .pfmb-form input[type="reset"], .pfmb-form input[type="button"] {
+    cursor: pointer;
+}
+
 .pfmb-form .field-row label:first-child {
     display: block;
     margin: 0 0 5px 0;
@@ -40,16 +55,25 @@
 .pfmb-form-wrap .progress-bar-wrap {
     width: 100%;
     background: #e9e9e9;
-    height: 6px;
+    height: auto;
+    min-height: 6px;
     overflow: hidden;
     border-radius: 4px;
     margin: 0 0 10px 0;
 }
 
 .pfmb-form-wrap .progress-bar-wrap .progress-bar {
-    height: 6px;
+    height: auto;
+    min-height: 6px;
     background: #b2b2b2;
     transition: width 300ms;
+    display: flex;
+    justify-content: center;
+}
+
+.pfmb-form-wrap .progress-bar .indicator {
+    font-size: 14px;
+    padding: 4px;
 }
 
 .pfmb-form .field-row input:not([type="radio"], [type="checkbox"], [type="color"], [type="submit"], [type="reset"], [type="button"], [type="file"]), .pfmb-form .field-row textarea, .pfmb-form .field-row select {
@@ -58,6 +82,10 @@
     padding: 5px;
     font-size: 15px;
     width: 100%;
+}
+
+.pfmb-form-wrap input[type="radio"], .pfmb-form-wrap input[type="checkbox"] {
+    margin-right: 6px;
 }
 
 .pfmb-form .col-10 {
